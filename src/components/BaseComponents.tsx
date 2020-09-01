@@ -7,7 +7,7 @@ const DefaultStyledInput = styled.input`
   font-size: 16px;
   background: transparent;
   border-bottom: 1px solid ${(props) => props.theme.main.color.inputBorder};
-  padding: 5px 5px 10px 5px;
+  padding: 5px 5px 10px 0px;
   margin-bottom: 40px;
 
   ::placeholder {
