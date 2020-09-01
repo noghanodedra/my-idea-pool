@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
 // Define the `theme` prop
 
@@ -12,23 +12,6 @@ const theme = {
     },
   },
 };
-
-// Button styled-component with props.theme properties
-
-const Button = styled.button`
-  color: ${props => props.theme.main.color};
-  border: 2px solid ${props => props.theme.main.color};
-`;
-
-// provide default theme properties for Button
-
-Button.defaultProps = {
-  theme: {
-    main: {
-      color: 'red'
-    }
-  }
-}
 
 interface IProps {
   children: ReactNode;

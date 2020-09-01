@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.tr`
   display: flex;
   align-items: center;
   margin-left: 100px;
@@ -10,16 +10,25 @@ const StyledContainer = styled.div`
   margin-top: 39px;
 `;
 
-const StyleHeaderTitle = styled.span`
+const StyleHeaderTitle = styled.th`
   height: 20px;
-  width: 4%;
+  width: 50px;
   text-align: center;
   margin-left: 34px;
   font-size: 14px;
+  font-weight: normal;
+  color: #2a3842;
 `;
-const StyleHeaderTitleNone = styled.span`
+const StyleHeaderTitleNone = styled.th`
   height: 20px;
   width: 460px;
+`;
+
+const StyleHeaderTitleAvg = styled(StyleHeaderTitle)`
+  margin-left: 45px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #2a3842;
 `;
 
 const Header = () => {
@@ -29,8 +38,9 @@ const Header = () => {
         <StyleHeaderTitle>Impact</StyleHeaderTitle>
         <StyleHeaderTitle>Ease</StyleHeaderTitle>
         <StyleHeaderTitle>Confidence</StyleHeaderTitle>
+        <StyleHeaderTitleAvg>Avg.</StyleHeaderTitleAvg>
       </StyledContainer>
     );
 }
 
-export default Header
+export default Header;

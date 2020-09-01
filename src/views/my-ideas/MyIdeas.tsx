@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import AddIcon from '../../assets/images/btn_addanidea@2x.png';
 import BulbIcon from '../../assets/images/bulb@2x.png';
 import Header from './components/header/Header';
 import InlineEditRow from './components/inline-edit-row/InlineEditRow';
+import { Idea } from './Idea';
 
 const StyledContainer = styled.div`
   margin-left: 79px;
@@ -55,25 +56,48 @@ const BulbImg = styled.img`
 `;
 
 const MyIdeas = () => {
-    const noRecords = false;
+    const initialRecords: Idea[] = [];
+    const [records, setRecords] = useState(initialRecords);
+
+    const onAdd = () => {
+      console.log('add');
+      const record: Idea = {
+        content: "",
+        impact: 10,
+        ease: 10,
+        confidence: 10,
+        persisted: false
+      };
+      setRecords([record, ...records]);
+    }
+
     return (
       <StyledContainer>
         <StyledHeader>
           <StyledTitle>My Ideas</StyledTitle>
-          <AddButtonImg src={AddIcon}></AddButtonImg>
+          <AddButtonImg src={AddIcon} onClick={onAdd}></AddButtonImg>
         </StyledHeader>
         <StyledIdeasContainer>
-          {noRecords && (
+          {records.length === 0 ? (
             <StyledNoRecordsView>
               <BulbImg src={BulbIcon}></BulbImg>
               Got Ideas?
             </StyledNoRecordsView>
+          ) : (
+            <table>
+              <thead>
+                <Header></Header>
+              </thead>
+              <tbody>
+                {records.map((record, index) => (
+                  <InlineEditRow key={index} editMode={!record.persisted} record={record}></InlineEditRow>
+                ))}
+              </tbody>
+            </table>
           )}
-          <Header></Header>
-          <InlineEditRow></InlineEditRow>
         </StyledIdeasContainer>
       </StyledContainer>
     );
 }
 
-export default MyIdeas
+export default MyIdeas;

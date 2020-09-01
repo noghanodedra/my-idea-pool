@@ -44,3 +44,34 @@ span > b:nth-of-type(2) > i {
   left: 40% !important;
   border-width: 0.8ex 0.8ex 0px !important;
 }
+
+.custom-ui {
+  text-align: center;
+  width: 300px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
+}
+
+.custom-ui > div {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.custom-ui > button {
+  width: 120px;
+  padding: 10px;
+  border: 1px solid #fff;
+  margin: 10px;
+  margin-bottom: 1px;
+  margin-top: 30px;
+  cursor: pointer;
+  background: none;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.react-confirm-alert-overlay {
+  background: none !important;
+}

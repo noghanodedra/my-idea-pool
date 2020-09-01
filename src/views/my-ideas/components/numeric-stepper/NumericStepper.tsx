@@ -7,7 +7,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 28px;
+  margin-left: 30px;
 `;
 
 const NumericStepper = (props: any) => {
