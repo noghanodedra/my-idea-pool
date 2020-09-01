@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import AddIcon from '../../assets/images/btn_addanidea@2x.png';
 import BulbIcon from '../../assets/images/bulb@2x.png';
-import NumericStepper from './components/numeric-stepper/NumericStepper';
+import Header from './components/header/Header';
+import InlineEditRow from './components/inline-edit-row/InlineEditRow';
 
 const StyledContainer = styled.div`
   margin-left: 79px;
@@ -54,7 +55,7 @@ const BulbImg = styled.img`
 `;
 
 const MyIdeas = () => {
-    const noRecords = true;
+    const noRecords = false;
     return (
       <StyledContainer>
         <StyledHeader>
@@ -68,11 +69,8 @@ const MyIdeas = () => {
               Got Ideas?
             </StyledNoRecordsView>
           )}
-          <NumericStepper
-            defaultValue={10}
-            min={0}
-            max={10}
-          ></NumericStepper>
+          <Header></Header>
+          <InlineEditRow></InlineEditRow>
         </StyledIdeasContainer>
       </StyledContainer>
     );
