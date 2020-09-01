@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import AddIcon from '../../assets/images/btn_addanidea@2x.png';
 import BulbIcon from '../../assets/images/bulb@2x.png';
+import NumericStepper from './components/numeric-stepper/NumericStepper';
 
 const StyledContainer = styled.div`
   margin-left: 79px;
@@ -67,6 +68,11 @@ const MyIdeas = () => {
               Got Ideas?
             </StyledNoRecordsView>
           )}
+          <NumericStepper
+            defaultValue={10}
+            min={0}
+            max={10}
+          ></NumericStepper>
         </StyledIdeasContainer>
       </StyledContainer>
     );

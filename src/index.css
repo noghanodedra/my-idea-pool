@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.react-numeric-input {
+  position: absolute;
+  font-size: 14px;
+  color: #4a4a4a;
+  width: 45px;
+  height: 36px;
+  background-image: linear-gradient(-180deg, #f2f2f2 0%, #d4d4d4 100%);
+  border: 1px solid #979797;
+  box-shadow: 0 1px 2px 0;
+  padding-left: 8px;
+}
+input[type="text"] {
+  outline: none;
+  border: none !important;
+  background: transparent;
+  padding-top: 10px;
+}
+span > b {
+  border-style: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+span > b:nth-of-type(1) > i {
+  top: 65% !important;
+  left: 40% !important;
+  border-width: 0px 0.8ex 0.8ex !important;
+}
+span > b:nth-of-type(2) > i {
+  top: 40% !important;
+  left: 40% !important;
+  border-width: 0.8ex 0.8ex 0px !important;
+}
