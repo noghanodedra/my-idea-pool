@@ -1,4 +1,7 @@
+import { AUTH_DETAILS } from 'constants/common.constants';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { userService } from 'services/user-service';
 import styled from 'styled-components';
 
 import {
@@ -20,6 +23,24 @@ const StyledButtonContainer = styled(DefaultStyledButtonContainer)`
 `;
 
 const SignUp = () => {
+
+    const history = useHistory();
+
+    const onSignUp = async () => {
+      try {
+        const response = await userService.signUp(
+          "email-99@test.com",
+          "mytest-user",
+          "Password@123"
+        );
+        sessionStorage.removeItem(AUTH_DETAILS);
+        sessionStorage.setItem(AUTH_DETAILS, JSON.stringify(response.data));
+        setTimeout(() => {
+          history.replace("/ideas");
+        }, 500);
+      } catch (e) {}
+    }
+
     return (
       <DefaultStyledFormContainer>
         <StyledFormHeader>Sign Up</StyledFormHeader>
@@ -43,7 +64,9 @@ const SignUp = () => {
             aria-label="Password"
           />
           <StyledButtonContainer>
-            <DefaultStyledPrimaryButton>SIGN UP</DefaultStyledPrimaryButton>
+            <DefaultStyledPrimaryButton type="button" onClick={onSignUp}>
+              SIGN UP
+            </DefaultStyledPrimaryButton>
             <div>
               Already have account ?
               <DefaultStyledLink>&nbsp;Log in</DefaultStyledLink>

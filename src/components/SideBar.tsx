@@ -1,4 +1,8 @@
+import { UserContext } from 'contexts/UserContext';
+import { getAuthDetails } from 'helpers/auth-header';
 import React from 'react';
+import { useHistory } from 'react-router';
+import { authService } from 'services/auth-service';
 import styled from 'styled-components';
 
 import Logo from '../assets/images/IdeaPool_icon@2x.png';
@@ -56,23 +60,38 @@ const StyledLink = styled.a`
 `;
 
 export const SideBar = () => {
-    const isProfile = true;
+  
+    const history = useHistory();
+    const { userDetails } = React.useContext(UserContext);
+
+    const onLogout = async () => {
+      const authDetails = getAuthDetails();
+      try{
+         await authService.logout(authDetails.refresh_token);
+         history.push('/');
+      } catch(e) {
+
+      }
+    }
+
     return (
       <StyledContainer>
         <StyledBrandLogo src={Logo} alt="logo" />
         <StyledBrandTitle>The Idea Pool</StyledBrandTitle>
-        {isProfile && (
+        {userDetails && userDetails.name && (
           <>
             <StyledHR></StyledHR>
             <StyledProfileContainer>
               <StyledProfileAvatar>
-                <StyledProfileImage src="https://www.gravatar.com/avatar/b36aafe03e05a85031fd8c411b69f792?d=mm&s=200"></StyledProfileImage>
+                <StyledProfileImage
+                  src={userDetails.avatar_url || ""}
+                ></StyledProfileImage>
               </StyledProfileAvatar>
               <StyledProfileDetailsUsername>
-                Noghan Odedra
+                {userDetails.name}
               </StyledProfileDetailsUsername>
             </StyledProfileContainer>
-            <StyledLink>Log out</StyledLink>
+            <StyledLink onClick={onLogout}>Log out</StyledLink>
           </>
         )}
       </StyledContainer>

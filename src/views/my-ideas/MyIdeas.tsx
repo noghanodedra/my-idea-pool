@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { UserContext } from 'contexts/UserContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { userService } from 'services/user-service';
 import styled from 'styled-components';
 
 import AddIcon from '../../assets/images/btn_addanidea@2x.png';
@@ -58,6 +60,18 @@ const BulbImg = styled.img`
 const MyIdeas = () => {
     const initialRecords: Idea[] = [];
     const [records, setRecords] = useState(initialRecords);
+    const { setDetails } = useContext(UserContext);
+
+    const getProfileDetails = async () => {
+        try{
+          const response = await userService.me();
+          setDetails(response.data);
+          return response.data;
+        } catch(e) {
+          console.log(e);
+        }
+        return null;
+    }
 
     const onAdd = () => {
       console.log('add');
@@ -70,7 +84,14 @@ const MyIdeas = () => {
       };
       setRecords([record, ...records]);
     }
-
+    
+    useEffect(() => {
+      getProfileDetails();
+      return () => {
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
     return (
       <StyledContainer>
         <StyledHeader>
