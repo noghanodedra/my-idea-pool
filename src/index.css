@@ -28,6 +28,7 @@ code {
   border: none !important;
   background: transparent;
   padding-top: 10px;
+  width: 60px;
 }
 span > b {
   border-style: none !important;
@@ -74,4 +75,17 @@ span > b:nth-of-type(2) > i {
 }
 .react-confirm-alert-overlay {
   background: none !important;
+}
+
+.row-container .hidden {
+  visibility: hidden;
+}
+.row-container:hover .hidden {
+  visibility: visible;
+}
+.invalid {
+  color: red;
+  font-size: 14px;
+  margin-top: -30px;
+  padding-bottom: 40px;
 }

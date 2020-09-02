@@ -62,15 +62,20 @@ const StyledLink = styled.a`
 export const SideBar = () => {
   
     const history = useHistory();
-    const { userDetails } = React.useContext(UserContext);
+    
+    const { userDetails, setDetails } = React.useContext(UserContext);
 
     const onLogout = async () => {
       const authDetails = getAuthDetails();
       try{
-         await authService.logout(authDetails.refresh_token);
-         history.push('/');
+         const resp = await authService.logout(authDetails.refresh_token);
+         console.log("logged out.", resp);
+         setDetails(null);
+         history.push("/");
+         history.replace('/');
+         console.log("logged out.")
       } catch(e) {
-
+        console.log('logout', e);
       }
     }
 

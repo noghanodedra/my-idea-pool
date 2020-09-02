@@ -1,7 +1,8 @@
 export interface Idea {
+  id: string;
   content: string;
   impact: number;
   ease: number;
   confidence: number;
-  persisted: boolean;
+  average?: number;
 }

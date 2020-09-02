@@ -1,5 +1,6 @@
 import { confirmDialog } from 'components/ConfirmDialog';
 import React, { useState } from 'react';
+import { ideaService } from 'services/idea-service';
 import styled from 'styled-components';
 
 import BinIcon from '../../../../assets/images/bin@2x.png';
@@ -79,29 +80,63 @@ const StyledTextValue = styled(StyledText)`
 interface IProps {
   editMode: boolean;
   record: Idea;
+  recordsLoaderFn: Function;
 }
 
-const InlineEditRow = ({ editMode, record }: IProps) => {
-  const [rowFocused, setRowFocused] = useState(false);
+const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
   const [mode, setMode] = useState(editMode);
   const [currentRecord, setCurrentRecord] = useState(record);
 
   console.log(editMode);
 
-  const onDelete = () => {
-    confirmDialog(() => {}, "This idea will be permanently deleted.");
+  const _deleteRecord = async (id: string) => {
+     try {
+       await ideaService.deleteIdea(id);
+       await recordsLoaderFn();
+     } catch (error) {
+       console.log(error);
+     }
+  }
+
+  const onDelete = (id: string) => {
+    confirmDialog(() => _deleteRecord(id), "This idea will be permanently deleted.");
+  };
+
+  const onAddEdit = async () => {
+    try {
+       if(currentRecord.id.length > 0) {
+          await ideaService.updateIdea(
+            currentRecord.id,
+            currentRecord.content,
+            currentRecord.impact,
+            currentRecord.ease,
+            currentRecord.confidence
+          );
+       } else {
+          await ideaService.createIdea(
+            currentRecord.content,
+            currentRecord.impact,
+            currentRecord.ease,
+            currentRecord.confidence
+          );
+       }
+      setMode(false);
+      await recordsLoaderFn();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const average = (record: Idea) => {
-    return ((record.impact + record.ease + record.confidence)/ 3.0).toFixed(2);
-  }
+    const noOfScoreItems = 3.0;
+    return (
+      (record.impact + record.ease + record.confidence) /
+      noOfScoreItems
+    ).toFixed(2);
+  };
 
   return (
-    <StyledContainer
-      tabIndex={1}
-      onMouseEnter={() => !editMode && setRowFocused(true)}
-      onMouseLeave={() => !editMode && setRowFocused(false)}
-    >
+    <StyledContainer className="row-container">
       <StyledDot></StyledDot>
       {mode ? (
         <>
@@ -109,6 +144,9 @@ const InlineEditRow = ({ editMode, record }: IProps) => {
             <StyledInput
               name="content"
               type="text"
+              min={3}
+              max={255}
+              required
               value={currentRecord.content}
               onChange={(e) =>
                 setCurrentRecord({ ...currentRecord, content: e.target.value })
@@ -146,30 +184,33 @@ const InlineEditRow = ({ editMode, record }: IProps) => {
             ></NumericStepper>
           </td>
           <StyledText>{average(currentRecord)}</StyledText>
-          <td width={85}>
-            <StyledButtonImg src={ConfirmIcon}></StyledButtonImg>
+          <td width={95}>
+            <StyledButtonImg
+              src={ConfirmIcon}
+              onClick={onAddEdit}
+            ></StyledButtonImg>
             <StyledButtonImg src={CancelIcon}></StyledButtonImg>
           </td>
         </>
       ) : (
         <>
-          <StyledInputValue>3D print all your emails</StyledInputValue>
-          <StyledNumericValue>10</StyledNumericValue>
-          <StyledNumericValue>9</StyledNumericValue>
-          <StyledNumericValue>10</StyledNumericValue>
+          <StyledInputValue>{record.content}</StyledInputValue>
+          <StyledNumericValue>{record.impact}</StyledNumericValue>
+          <StyledNumericValue>{record.ease}</StyledNumericValue>
+          <StyledNumericValue>{record.confidence}</StyledNumericValue>
           <StyledTextValue>{average(record)}</StyledTextValue>
-          {rowFocused && (
-            <td>
-              <StyledButtonImg
-                src={PenIcon}
-                onClick={() => setMode(true)}
-              ></StyledButtonImg>
-              <StyledButtonImg
-                src={BinIcon}
-                onClick={onDelete}
-              ></StyledButtonImg>
-            </td>
-          )}
+          <td className="hidden">
+            <StyledButtonImg
+              src={PenIcon}
+              onClick={() => setMode(true)}
+            ></StyledButtonImg>
+            <StyledButtonImg
+              src={BinIcon}
+              onClick={() => {
+                onDelete(record.id);
+              }}
+            ></StyledButtonImg>
+          </td>
         </>
       )}
     </StyledContainer>

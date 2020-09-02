@@ -1,5 +1,6 @@
 import { UserContext } from 'contexts/UserContext';
 import React, { useContext, useEffect, useState } from 'react';
+import { ideaService } from 'services/idea-service';
 import { userService } from 'services/user-service';
 import styled from 'styled-components';
 
@@ -12,7 +13,7 @@ import { Idea } from './Idea';
 const StyledContainer = styled.div`
   margin-left: 79px;
   margin-right: 87px;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 `;
 
@@ -38,6 +39,9 @@ const AddButtonImg = styled.img`
 
 const StyledIdeasContainer = styled.div`
   text-align: center;
+  height: 750px;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const StyledNoRecordsView = styled.div`
@@ -73,20 +77,32 @@ const MyIdeas = () => {
         return null;
     }
 
+    const getIdeas = async () => {
+      try {
+        const response = await ideaService.getIdeas(1);
+        setRecords(response.data);
+        return response.data;
+      } catch (e) {
+        console.log(e);
+      }
+      return null;
+    };
+
     const onAdd = () => {
       console.log('add');
       const record: Idea = {
+        id: "",
         content: "",
         impact: 10,
-        ease: 10,
-        confidence: 10,
-        persisted: false
+        ease: 9,
+        confidence: 8,
       };
       setRecords([record, ...records]);
     }
     
     useEffect(() => {
       getProfileDetails();
+      getIdeas();
       return () => {
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +127,11 @@ const MyIdeas = () => {
               </thead>
               <tbody>
                 {records.map((record, index) => (
-                  <InlineEditRow key={index} editMode={!record.persisted} record={record}></InlineEditRow>
+                  <InlineEditRow
+                    editMode={record.id.length === 0 ? true : false}
+                    record={record}
+                    recordsLoaderFn={getIdeas}
+                  ></InlineEditRow>
                 ))}
               </tbody>
             </table>

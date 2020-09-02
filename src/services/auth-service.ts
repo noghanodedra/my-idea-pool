@@ -32,7 +32,7 @@ const logout = async (refreshToken: string) => {
     options
   );
   sessionStorage.removeItem(AUTH_DETAILS);
-  return await response.json();
+  return response;
 };
 
 export const authService = {
