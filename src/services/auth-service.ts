@@ -1,7 +1,5 @@
-import { AUTH_DETAILS } from 'constants/common.constants';
-import { getAuthDetails } from 'helpers/auth-header';
-
 import API from '../api';
+import { TokenStorage } from './token-storage-service';
 
 const RESOURCE_NAME = "/access-tokens";
 
@@ -23,7 +21,7 @@ const logout = async (refreshToken: string) => {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      "X-Access-Token": `${getAuthDetails().jwt}`,
+      "X-Access-Token": `${TokenStorage.getToken()}`,
     },
     body: JSON.stringify({ "refresh_token": refreshToken }),
   };
@@ -31,7 +29,7 @@ const logout = async (refreshToken: string) => {
     `${process.env.REACT_APP_API_ENDPOINT}${RESOURCE_NAME}`,
     options
   );
-  sessionStorage.removeItem(AUTH_DETAILS);
+  TokenStorage.clear();
   return response;
 };
 

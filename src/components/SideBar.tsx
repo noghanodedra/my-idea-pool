@@ -1,8 +1,8 @@
 import { UserContext } from 'contexts/UserContext';
-import { getAuthDetails } from 'helpers/auth-header';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { authService } from 'services/auth-service';
+import { TokenStorage } from 'services/token-storage-service';
 import styled from 'styled-components';
 
 import Logo from '../assets/images/IdeaPool_icon@2x.png';
@@ -66,12 +66,12 @@ export const SideBar = () => {
     const { userDetails, setDetails } = React.useContext(UserContext);
 
     const onLogout = async () => {
-      const authDetails = getAuthDetails();
+      
       try{
-         const resp = await authService.logout(authDetails.refresh_token);
+         const resp = await authService.logout(TokenStorage.getRefreshToken()|| '');
          console.log("logged out.", resp);
          setDetails(null);
-         history.push("/");
+         //history.push("/");
          history.replace('/');
          console.log("logged out.")
       } catch(e) {

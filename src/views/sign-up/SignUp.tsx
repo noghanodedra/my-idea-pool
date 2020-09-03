@@ -1,7 +1,7 @@
-import { AUTH_DETAILS } from 'constants/common.constants';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { TokenStorage } from 'services/token-storage-service';
 import { userService } from 'services/user-service';
 import styled from 'styled-components';
 
@@ -36,8 +36,9 @@ const SignUp = () => {
           name,
           password
         );
-        sessionStorage.removeItem(AUTH_DETAILS);
-        sessionStorage.setItem(AUTH_DETAILS, JSON.stringify(response.data));
+        TokenStorage.clear();
+        TokenStorage.storeRefreshToken(response.data.refresh_token);
+        TokenStorage.storeToken(response.data.jwt);
         history.push("/ideas");
       } catch (e) {
         console.log(e);

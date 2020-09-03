@@ -5,7 +5,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import styled from 'styled-components';
 
 const StyledOkButton = styled.button`
-  color: #00A843;
+  color: #00A843 !important;
+
 `;
 
 export const confirmDialog = (onConfirm: any, message: string) => confirmAlert({

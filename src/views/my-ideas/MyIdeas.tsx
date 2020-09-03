@@ -61,9 +61,21 @@ const BulbImg = styled.img`
   margin-bottom: 23px;
 `;
 
+const defaultRecord: Idea = {
+  id: "",
+  content: "",
+  impact: 10,
+  ease: 9,
+  confidence: 8,
+};
+
 const MyIdeas = () => {
     const initialRecords: Idea[] = [];
     const [records, setRecords] = useState(initialRecords);
+    const [addNewRecord, setAddNewRecord] = useState(false);
+
+    let pageNumber = 1;
+
     const { setDetails } = useContext(UserContext);
 
     const getProfileDetails = async () => {
@@ -77,9 +89,10 @@ const MyIdeas = () => {
         return null;
     }
 
-    const getIdeas = async () => {
+    const getIdeas = async (pageNumber: number = 1) => {
       try {
-        const response = await ideaService.getIdeas(1);
+        const response = await ideaService.getIdeas(pageNumber);
+        setRecords([]);
         setRecords(response.data);
         return response.data;
       } catch (e) {
@@ -90,19 +103,12 @@ const MyIdeas = () => {
 
     const onAdd = () => {
       console.log('add');
-      const record: Idea = {
-        id: "",
-        content: "",
-        impact: 10,
-        ease: 9,
-        confidence: 8,
-      };
-      setRecords([record, ...records]);
+      setAddNewRecord(true);
     }
     
     useEffect(() => {
       getProfileDetails();
-      getIdeas();
+      getIdeas(pageNumber);
       return () => {
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,9 +132,17 @@ const MyIdeas = () => {
                 <Header></Header>
               </thead>
               <tbody>
+                {addNewRecord && (
+                  <InlineEditRow
+                    key={1}
+                    record={defaultRecord}
+                    removeInlineEditFn={setAddNewRecord}
+                    recordsLoaderFn={getIdeas}
+                  ></InlineEditRow>
+                )}
                 {records.map((record, index) => (
                   <InlineEditRow
-                    editMode={record.id.length === 0 ? true : false}
+                    key={record.id}
                     record={record}
                     recordsLoaderFn={getIdeas}
                   ></InlineEditRow>

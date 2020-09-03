@@ -1,8 +1,8 @@
-import { AUTH_DETAILS } from 'constants/common.constants';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { authService } from 'services/auth-service';
+import { TokenStorage } from 'services/token-storage-service';
 import styled from 'styled-components';
 
 import {
@@ -29,18 +29,18 @@ const Login = () => {
 
   const history = useHistory();
 
-  const onLogin = async (email: string, password: string) => {
+  const onLogin = async (
+    email: string = "email-1@test.com",
+    password: string = "the-Secret-123"
+  ) => {
     try {
-      const response = await authService.login(
-        email,
-        password
-      );
+      const response = await authService.login(email, password);
       console.log(response.data);
-      sessionStorage.removeItem(AUTH_DETAILS);
-      sessionStorage.setItem(AUTH_DETAILS, JSON.stringify(response.data));
+      TokenStorage.clear();
+      TokenStorage.storeRefreshToken(response.data.refresh_token);
+      TokenStorage.storeToken(response.data.jwt);
       history.replace("/ideas");
-    } catch(e) {
-    }
+    } catch (e) {}
   };
 
   const onSubmit = (data:any) => {
@@ -57,6 +57,7 @@ const Login = () => {
             name="email"
             placeholder="Email"
             aria-label="Email"
+            defaultValue={"email-1@test.com"}
             aria-invalid={errors.email ? "true" : "false"}
             ref={register({
               required: true,
@@ -75,14 +76,10 @@ const Login = () => {
             name="password"
             placeholder="Password"
             aria-label="Password"
+            defaultValue={"the-Secret-123"}
             aria-invalid={errors.password ? "true" : "false"}
             ref={register({
               required: true,
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
-                message:
-                  "Please enter a valid password. It must contain minimum 8 characters, one uppercase letter, one lowercase, one number required.",
-              },
             })}
           />
           {errors.password && errors.password.type === "required" && (
@@ -97,7 +94,9 @@ const Login = () => {
             </DefaultStyledPrimaryButton>
             <div>
               Don't have an account ?
-              <DefaultStyledLink onClick={()=>history.replace('/signup')}>&nbsp;Create an account</DefaultStyledLink>
+              <DefaultStyledLink onClick={() => history.replace("/signup")}>
+                &nbsp;Create an account
+              </DefaultStyledLink>
             </div>
           </StyledButtonContainer>
         </DefaultStyledForm>

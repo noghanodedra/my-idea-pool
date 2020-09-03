@@ -1,1 +1,1 @@
-export const AUTH_DETAILS = 'AUTH_DETAILS';
+export const AUTHORIZATION_HEADER_NAME = 'X-Access-Token';

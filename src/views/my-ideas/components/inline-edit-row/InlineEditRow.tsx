@@ -16,6 +16,7 @@ const StyledContainer = styled.tr`
   align-items: center;
   margin-left: 100px;
   margin-bottom: 36px;
+  height: 40px;
 `;
 
 const StyledInput = styled.input`
@@ -78,16 +79,17 @@ const StyledTextValue = styled(StyledText)`
 `;
 
 interface IProps {
-  editMode: boolean;
   record: Idea;
+  removeInlineEditFn?: Function;
   recordsLoaderFn: Function;
 }
 
-const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
-  const [mode, setMode] = useState(editMode);
+const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) => {
+
+  const [mode, setMode] = useState(record.id.length === 0 ? true: false);
   const [currentRecord, setCurrentRecord] = useState(record);
 
-  console.log(editMode);
+  console.log("editMode", mode);
 
   const _deleteRecord = async (id: string) => {
      try {
@@ -112,6 +114,7 @@ const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
             currentRecord.ease,
             currentRecord.confidence
           );
+          setMode(false);
        } else {
           await ideaService.createIdea(
             currentRecord.content,
@@ -119,8 +122,10 @@ const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
             currentRecord.ease,
             currentRecord.confidence
           );
+          if(removeInlineEditFn) {
+            removeInlineEditFn(false);
+          }
        }
-      setMode(false);
       await recordsLoaderFn();
     } catch (error) {
       console.log(error);
@@ -132,7 +137,7 @@ const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
     return (
       (record.impact + record.ease + record.confidence) /
       noOfScoreItems
-    ).toFixed(2);
+    ).toFixed(1);
   };
 
   return (
@@ -184,12 +189,19 @@ const InlineEditRow = ({ editMode, record, recordsLoaderFn }: IProps) => {
             ></NumericStepper>
           </td>
           <StyledText>{average(currentRecord)}</StyledText>
-          <td width={95}>
+          <td width={85}>
             <StyledButtonImg
               src={ConfirmIcon}
               onClick={onAddEdit}
             ></StyledButtonImg>
-            <StyledButtonImg src={CancelIcon}></StyledButtonImg>
+            <StyledButtonImg
+              src={CancelIcon}
+              onClick={() => {
+                record.id.length > 0
+                  ? setMode(false)
+                  : removeInlineEditFn && removeInlineEditFn();
+              }}
+            ></StyledButtonImg>
           </td>
         </>
       ) : (
