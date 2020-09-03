@@ -29,9 +29,9 @@ const Login = () => {
 
   const history = useHistory();
 
-  const onLogin = async (email: string, password: string) => {
+  const onLogin = async (data: any) => {
     try {
-      const response = await authService.login(email, password);
+      const response = await authService.login(data.email, data.password);
       TokenStorage.clear();
       TokenStorage.storeRefreshToken(response.data.refresh_token);
       TokenStorage.storeToken(response.data.jwt);
@@ -39,16 +39,12 @@ const Login = () => {
     } catch (e) {}
   };
 
-  const onSubmit = (data: any) => {
-    onLogin(data.email, data.password);
-  };
-
   TokenStorage.clear();
 
   return (
     <DefaultStyledFormContainer>
       <StyledFormHeader>Log In</StyledFormHeader>
-      <DefaultStyledForm method="post" onSubmit={handleSubmit(onSubmit)}>
+      <DefaultStyledForm method="post" onSubmit={handleSubmit(onLogin)}>
         <DefaultStyledInput
           type="email"
           name="email"
@@ -58,9 +54,15 @@ const Login = () => {
           ref={register(EmailValidation())}
         />
         {errors.email && errors.email.type === "required" && (
-          <p className="invalid">This is required</p>
+          <p role="alert" className="invalid">
+            This is required
+          </p>
         )}
-        {errors.email && <p className="invalid">{errors.email.message}</p>}
+        {errors.email && errors.email.message && (
+          <p role="alert" className="invalid">
+            {errors.email.message}
+          </p>
+        )}
         <DefaultStyledInput
           type="password"
           name="password"
@@ -72,10 +74,12 @@ const Login = () => {
           })}
         />
         {errors.password && errors.password.type === "required" && (
-          <p className="invalid">This is required</p>
+          <p role="alert" className="invalid">
+            This is required
+          </p>
         )}
         <StyledButtonContainer>
-          <DefaultStyledPrimaryButton type="submit">
+          <DefaultStyledPrimaryButton role="button" type="submit">
             LOG IN
           </DefaultStyledPrimaryButton>
           <div>

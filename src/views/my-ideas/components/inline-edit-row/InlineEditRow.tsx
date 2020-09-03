@@ -105,7 +105,6 @@ const InlineEditRow = ({
       await ideaService.deleteIdea(id);
       await recordsLoaderFn();
     } catch (error) {
-      console.log(error);
     }
   };
 

@@ -86,7 +86,6 @@ const MyIdeas = () => {
       setDetails(response.data);
       return response.data;
     } catch (e) {
-      console.log(e);
     }
     return null;
   };
@@ -100,13 +99,11 @@ const MyIdeas = () => {
       setLoading(false);
       return response.data;
     } catch (e) {
-      console.log(e);
     }
     return null;
   };
 
   const onAdd = () => {
-    console.log("add");
     setAddNewRecord(true);
   };
 
@@ -128,7 +125,7 @@ const MyIdeas = () => {
     <StyledContainer>
       <StyledHeader>
         <StyledTitle>My Ideas</StyledTitle>
-        <AddButtonImg src={AddIcon} onClick={onAdd}></AddButtonImg>
+        <AddButtonImg src={AddIcon} onClick={onAdd} alt="addRecord"></AddButtonImg>
       </StyledHeader>
       <StyledIdeasContainer ref={(ref) => (scrollParentRef = ref)}>
         {records.length === 0 && !addNewRecord && !loading ? (

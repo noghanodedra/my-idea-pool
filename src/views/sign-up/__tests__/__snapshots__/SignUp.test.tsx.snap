@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sign Up Component is styled correctly 1`] = `
+<ThemeProvider
+  theme={
+    Object {
+      "main": Object {
+        "color": Object {
+          "inputBorder": "#455E70",
+          "placeholder": "#2a3842",
+          "primary": "#00A843",
+        },
+      },
+    }
+  }
+>
+  <SignUp />
+</ThemeProvider>
+`;

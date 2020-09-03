@@ -69,7 +69,6 @@ export const SideBar = () => {
       setDetails(null);
       history.replace("/");
     } catch (e) {
-      console.log("logout", e);
     }
   };
 

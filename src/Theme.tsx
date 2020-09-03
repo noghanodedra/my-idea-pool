@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components';
 
 // Define the `theme` prop
 
-const theme = {
+export const theme = {
   main: {
     color: {
       primary: "#00A843",
