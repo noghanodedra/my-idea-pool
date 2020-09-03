@@ -27,7 +27,7 @@ const StyledMessage = styled.span`
 `;
 
 const StyledOkButton = styled.button`
-  color: #00A843 !important;
+  color: #00a843 !important;
   font-size: 20px;
   border: none;
   background: none;
@@ -36,19 +36,20 @@ const StyledOkButton = styled.button`
   cursor: pointer;
 `;
 
-export const InfoDialog = (message: string) => confirmAlert({
-   customUI: ({ onClose }) => {
-     return (
-       <StyledInfoContainer>
-         <StyledMessage>{message}</StyledMessage>
-         <StyledOkButton
-           onClick={() => {
-             onClose();
-           }}
-         >
-           Ok
-         </StyledOkButton>
-       </StyledInfoContainer>
-     );
-   },
-});
+export const InfoDialog = (message: string) =>
+  confirmAlert({
+    customUI: ({ onClose }) => {
+      return (
+        <StyledInfoContainer>
+          <StyledMessage>{message}</StyledMessage>
+          <StyledOkButton
+            onClick={() => {
+              onClose();
+            }}
+          >
+            Ok
+          </StyledOkButton>
+        </StyledInfoContainer>
+      );
+    },
+  });

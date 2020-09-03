@@ -60,45 +60,39 @@ const StyledLink = styled.a`
 `;
 
 export const SideBar = () => {
-  
-    const history = useHistory();
-    
-    const { userDetails, setDetails } = React.useContext(UserContext);
+  const history = useHistory();
+  const { userDetails, setDetails } = React.useContext(UserContext);
 
-    const onLogout = async () => {
-      
-      try{
-         const resp = await authService.logout(TokenStorage.getRefreshToken()|| '');
-         console.log("logged out.", resp);
-         setDetails(null);
-         //history.push("/");
-         history.replace('/');
-         console.log("logged out.")
-      } catch(e) {
-        console.log('logout', e);
-      }
+  const onLogout = async () => {
+    try {
+      await authService.logout(TokenStorage.getRefreshToken() || "");
+      setDetails(null);
+      history.replace("/");
+    } catch (e) {
+      console.log("logout", e);
     }
+  };
 
-    return (
-      <StyledContainer>
-        <StyledBrandLogo src={Logo} alt="logo" />
-        <StyledBrandTitle>The Idea Pool</StyledBrandTitle>
-        {userDetails && userDetails.name && (
-          <>
-            <StyledHR></StyledHR>
-            <StyledProfileContainer>
-              <StyledProfileAvatar>
-                <StyledProfileImage
-                  src={userDetails.avatar_url || ""}
-                ></StyledProfileImage>
-              </StyledProfileAvatar>
-              <StyledProfileDetailsUsername>
-                {userDetails.name}
-              </StyledProfileDetailsUsername>
-            </StyledProfileContainer>
-            <StyledLink onClick={onLogout}>Log out</StyledLink>
-          </>
-        )}
-      </StyledContainer>
-    );
-}
+  return (
+    <StyledContainer>
+      <StyledBrandLogo src={Logo} alt="logo" />
+      <StyledBrandTitle>The Idea Pool</StyledBrandTitle>
+      {userDetails && userDetails.name && (
+        <>
+          <StyledHR></StyledHR>
+          <StyledProfileContainer>
+            <StyledProfileAvatar>
+              <StyledProfileImage
+                src={userDetails.avatar_url || ""}
+              ></StyledProfileImage>
+            </StyledProfileAvatar>
+            <StyledProfileDetailsUsername>
+              {userDetails.name}
+            </StyledProfileDetailsUsername>
+          </StyledProfileContainer>
+          <StyledLink onClick={onLogout}>Log out</StyledLink>
+        </>
+      )}
+    </StyledContainer>
+  );
+};

@@ -7,9 +7,8 @@ import BinIcon from '../../../../assets/images/bin@2x.png';
 import CancelIcon from '../../../../assets/images/Cancel_X@2x.png';
 import ConfirmIcon from '../../../../assets/images/Confirm_V@2x.png';
 import PenIcon from '../../../../assets/images/pen@2x.png';
-import { Idea } from '../../Idea';
+import { Idea } from '../../../../models/Idea';
 import NumericStepper from '../numeric-stepper/NumericStepper';
-
 
 const StyledContainer = styled.tr`
   display: flex;
@@ -52,7 +51,6 @@ const StyledDot = styled.td`
   display: inline-block;
 `;
 
-
 const StyledButtonImg = styled.img`
   width: 20px;
   height: 20px;
@@ -91,65 +89,71 @@ interface IProps {
   recordsLoaderFn: Function;
 }
 
-const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) => {
-
-  const [mode, setMode] = useState(record.id.length === 0 ? true: false);
+const InlineEditRow = ({
+  record,
+  removeInlineEditFn,
+  recordsLoaderFn,
+}: IProps) => {
+  const [mode, setMode] = useState(record.id.length === 0 ? true : false);
   const [currentRecord, setCurrentRecord] = useState(record);
-  const [contentError, setContentError] = useState({ message:""});
+  const [contentError, setContentError] = useState({ message: "" });
 
   console.log("editMode", mode);
 
   const _deleteRecord = async (id: string) => {
-     try {
-       await ideaService.deleteIdea(id);
-       await recordsLoaderFn();
-     } catch (error) {
-       console.log(error);
-     }
-  }
+    try {
+      await ideaService.deleteIdea(id);
+      await recordsLoaderFn();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onDelete = (id: string) => {
-    confirmDialog(() => _deleteRecord(id), "This idea will be permanently deleted.");
+    confirmDialog(
+      () => _deleteRecord(id),
+      "This idea will be permanently deleted."
+    );
   };
 
   const validateContent = () => {
-      const val = currentRecord.content;
-      if(!val || !val.length) {
-        setContentError({ message: "This is required." });
-        return false;
-      }
-      if (val && val.length > 255) {
-        setContentError({ message: "Maximum allowed characters is 255." });
-        return false;
-      }
-      return true;
-  }
+    const val = currentRecord.content;
+    if (!val || !val.length) {
+      setContentError({ message: "This is required." });
+      return false;
+    }
+    if (val && val.length > 255) {
+      setContentError({ message: "Maximum allowed characters is 255." });
+      return false;
+    }
+    return true;
+  };
 
   const onAddEdit = async () => {
     try {
-         if (!validateContent()) {
-           return;
-         }
-         if (currentRecord.id.length > 0) {
-           await ideaService.updateIdea(
-             currentRecord.id,
-             currentRecord.content,
-             currentRecord.impact,
-             currentRecord.ease,
-             currentRecord.confidence
-           );
-           setMode(false);
-         } else {
-           await ideaService.createIdea(
-             currentRecord.content,
-             currentRecord.impact,
-             currentRecord.ease,
-             currentRecord.confidence
-           );
-           if (removeInlineEditFn) {
-             removeInlineEditFn(false);
-           }
-         }
+      if (!validateContent()) {
+        return;
+      }
+      if (currentRecord.id.length > 0) {
+        await ideaService.updateIdea(
+          currentRecord.id,
+          currentRecord.content,
+          currentRecord.impact,
+          currentRecord.ease,
+          currentRecord.confidence
+        );
+        setMode(false);
+      } else {
+        await ideaService.createIdea(
+          currentRecord.content,
+          currentRecord.impact,
+          currentRecord.ease,
+          currentRecord.confidence
+        );
+        if (removeInlineEditFn) {
+          removeInlineEditFn(false);
+        }
+      }
       await recordsLoaderFn();
     } catch (error) {
       console.log(error);
@@ -176,19 +180,21 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
               min={1}
               max={255}
               value={currentRecord.content}
-              onChange={(e) =>{
+              onChange={(e) => {
                 setCurrentRecord({ ...currentRecord, content: e.target.value });
-                setContentError({message: ""});
+                setContentError({ message: "" });
               }}
             ></StyledInput>
             {contentError && contentError.message.length > 0 && (
-              <StyledValidationMessage>{contentError.message}</StyledValidationMessage>
+              <StyledValidationMessage>
+                {contentError.message}
+              </StyledValidationMessage>
             )}
           </td>
           <td>
             <NumericStepper
               defaultValue={currentRecord.impact}
-              min={0}
+              min={1}
               max={10}
               onChange={(val: number) =>
                 setCurrentRecord({ ...currentRecord, impact: val })
@@ -198,7 +204,7 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
           <td>
             <NumericStepper
               defaultValue={currentRecord.ease}
-              min={0}
+              min={1}
               max={10}
               onChange={(val: number) =>
                 setCurrentRecord({ ...currentRecord, ease: val })
@@ -208,7 +214,7 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
           <td>
             <NumericStepper
               defaultValue={currentRecord.confidence}
-              min={0}
+              min={1}
               max={10}
               onChange={(val: number) =>
                 setCurrentRecord({ ...currentRecord, confidence: val })

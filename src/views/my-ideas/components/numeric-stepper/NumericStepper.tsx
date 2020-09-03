@@ -11,17 +11,16 @@ const StyledContainer = styled.div`
 `;
 
 const NumericStepper = (props: any) => {
-     
-    return (
-      <StyledContainer>
-        <NumericInput
-          min={props.min}
-          max={props.max}
-          value={props.defaultValue}
-          onChange={props.onChange}
-        />
-      </StyledContainer>
-    );
-}
+  return (
+    <StyledContainer>
+      <NumericInput
+        min={props.min}
+        max={props.max}
+        value={props.defaultValue}
+        onChange={props.onChange}
+      />
+    </StyledContainer>
+  );
+};
 
 export default NumericStepper;

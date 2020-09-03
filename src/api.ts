@@ -12,43 +12,42 @@ const client = axios.create({
 
 const refreshTokenEndPoint = `${process.env.REACT_APP_API_ENDPOINT}/refresh`;
 //Add a response interceptor
-client.interceptors.response.use((response) => {
-   return response
-},  async (error) => {
-   const originalRequest = error.config;
-   
-   if (error.response && error.response.status !== 401) {
-     console.log(error.response.data);
-     InfoDialog(error.response.data.reason);
-   } else if (error.request) {
-     console.log(error.request);
-   } else {
-     console.log("Error", error.message);
-   }
+client.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
 
+    if (error.response && error.response.status !== 401) {
+      InfoDialog(error.response.data.reason);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log("Error", error.message);
+    }
 
-   if (
-     error.response.status === 401 &&
-     originalRequest.url === refreshTokenEndPoint
-   ) {
-     // eslint-disable-next-line no-restricted-globals
-     location.replace("/");
-     return Promise.reject(error);
-   }
-   console.log("retrye 11", originalRequest);
-   if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      originalRequest.url === refreshTokenEndPoint
+    ) {
+      // eslint-disable-next-line no-restricted-globals
+      location.replace("/");
+      return Promise.reject(error);
+    }
+    if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = TokenStorage.getRefreshToken() || '';
+      const refreshToken = TokenStorage.getRefreshToken() || "";
       const res = await authService.refreshToken(refreshToken);
       if (res.status === 200) {
-        console.log("retry/refresh success:", res.data);
-        TokenStorage.storeToken(res.data.jwt)
-        axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] =
-          + res.data.jwt;
+        TokenStorage.storeToken(res.data.jwt);
+        axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = +res.data
+          .jwt;
         return axios(originalRequest);
       }
-   }
-   return Promise.reject(error);
-});
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default client;

@@ -1,15 +1,20 @@
 import API from '../api';
 
-const RESOURCE_NAME = '/ideas';
+const RESOURCE_NAME = "/ideas";
 
-const createIdea = async (content: string, impact: number, ease: number, confidence: number) => {
-    return await API.post(`${RESOURCE_NAME}`, {
-      content,
-      impact,
-      ease,
-      confidence,
-    });
-}
+const createIdea = async (
+  content: string,
+  impact: number,
+  ease: number,
+  confidence: number
+) => {
+  return await API.post(`${RESOURCE_NAME}`, {
+    content,
+    impact,
+    ease,
+    confidence,
+  });
+};
 
 const updateIdea = async (
   id: string,
@@ -27,7 +32,7 @@ const updateIdea = async (
 };
 
 const getIdeas = async (page: number) => {
-  return await API.get(`${RESOURCE_NAME}`, { params: { page} });
+  return await API.get(`${RESOURCE_NAME}`, { params: { page } });
 };
 
 const deleteIdea = async (id: string) => {

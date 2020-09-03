@@ -5,26 +5,26 @@ import { confirmAlert } from 'react-confirm-alert';
 import styled from 'styled-components';
 
 const StyledOkButton = styled.button`
-  color: #00A843 !important;
-
+  color: #00a843 !important;
 `;
 
-export const confirmDialog = (onConfirm: any, message: string) => confirmAlert({
-   customUI: ({ onClose }) => {
-     return (
-       <div className="custom-ui">
-         <div>Are you sure?</div>
-         <p>{message}</p>
-         <button onClick={onClose}>Cancel</button>
-         <StyledOkButton
-           onClick={() => {
-             onConfirm();
-             onClose();
-           }}
-         >
-           Ok
-         </StyledOkButton>
-       </div>
-     );
-   },
-});
+export const confirmDialog = (onConfirm: any, message: string) =>
+  confirmAlert({
+    customUI: ({ onClose }) => {
+      return (
+        <div className="custom-ui">
+          <div>Are you sure?</div>
+          <p>{message}</p>
+          <button onClick={onClose}>Cancel</button>
+          <StyledOkButton
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+          >
+            Ok
+          </StyledOkButton>
+        </div>
+      );
+    },
+  });

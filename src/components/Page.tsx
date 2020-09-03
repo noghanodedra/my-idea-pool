@@ -10,13 +10,12 @@ const Page: React.FC<{
   privateRoute?: boolean;
 }> = ({ component: Component, ...rest }) => {
   const { title, privateRoute } = rest;
-  console.log("privateRoute", privateRoute);
   useEffect(() => {
     document.title = `My Idea Tool | ${title}`;
   });
 
   const condition = TokenStorage.isAuthenticated();
-  if(!privateRoute) {
+  if (!privateRoute) {
     return <Route path={rest.path} exact={rest.exact} component={Component} />;
   }
   return condition ? (

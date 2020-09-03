@@ -30,7 +30,7 @@ const DefaultStyledFormHeader = styled.div`
   width: 485px;
   height: 55px;
   font-size: 40px;
-  margin-bottom : 62px;
+  margin-bottom: 62px;
   text-align: center;
 `;
 

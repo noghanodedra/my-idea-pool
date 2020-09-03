@@ -7,9 +7,9 @@ import styled from 'styled-components';
 
 import AddIcon from '../../assets/images/btn_addanidea@2x.png';
 import BulbIcon from '../../assets/images/bulb@2x.png';
+import { Idea } from '../../models/Idea';
 import Header from './components/header/Header';
 import InlineEditRow from './components/inline-edit-row/InlineEditRow';
-import { Idea } from './Idea';
 
 const StyledContainer = styled.div`
   margin-left: 79px;
@@ -71,109 +71,111 @@ const defaultRecord: Idea = {
 };
 
 const MyIdeas = () => {
-    const initialRecords: Idea[] = [];
-    const [records, setRecords] = useState(initialRecords);
-    const [addNewRecord, setAddNewRecord] = useState(false);
+  const initialRecords: Idea[] = [];
+  const [records, setRecords] = useState(initialRecords);
+  const [addNewRecord, setAddNewRecord] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    let pageNumber = 1;
+  let pageNumber = 1;
 
-    const { setDetails } = useContext(UserContext);
+  const { setDetails } = useContext(UserContext);
 
-    const getProfileDetails = async () => {
-        try{
-          const response = await userService.me();
-          setDetails(response.data);
-          return response.data;
-        } catch(e) {
-          console.log(e);
-        }
-        return null;
+  const getProfileDetails = async () => {
+    try {
+      const response = await userService.me();
+      setDetails(response.data);
+      return response.data;
+    } catch (e) {
+      console.log(e);
     }
+    return null;
+  };
 
-    const getIdeas = async (pageNumber: number = 1) => {
-      try {
-        const response = await ideaService.getIdeas(pageNumber);
-        setRecords([]);
-        setRecords([...records, ...response.data]);
-        return response.data;
-      } catch (e) {
-        console.log(e);
-      }
-      return null;
-    };
-
-    const onAdd = () => {
-      console.log('add');
-      setAddNewRecord(true);
+  const getIdeas = async (pageNumber: number = 1) => {
+    try {
+      setLoading(true);
+      const response = await ideaService.getIdeas(pageNumber);
+      setRecords([]);
+      setRecords(response.data);
+      setLoading(false);
+      return response.data;
+    } catch (e) {
+      console.log(e);
     }
-    
-    const loadFunc = () => {
-      pageNumber++;
-      getIdeas(pageNumber);
-    };
+    return null;
+  };
 
-    useEffect(() => {
-      getProfileDetails();
-      getIdeas(pageNumber);
-      return () => {
-      }
+  const onAdd = () => {
+    console.log("add");
+    setAddNewRecord(true);
+  };
+
+  const loadFunc = () => {
+    pageNumber++;
+    getIdeas(pageNumber);
+  };
+
+  useEffect(() => {
+    getProfileDetails();
+    getIdeas(pageNumber);
+    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  }, []);
 
-    let scrollParentRef:any = null;
-    
-    return (
-      <StyledContainer>
-        <StyledHeader>
-          <StyledTitle>My Ideas</StyledTitle>
-          <AddButtonImg src={AddIcon} onClick={onAdd}></AddButtonImg>
-        </StyledHeader>
-        <StyledIdeasContainer ref={(ref) => (scrollParentRef = ref)}>
-          {records.length === 0 ? (
-            <StyledNoRecordsView>
-              <BulbImg src={BulbIcon}></BulbImg>
-              Got Ideas?
-            </StyledNoRecordsView>
-          ) : (
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={loadFunc}
-              hasMore={false}
-              useWindow={false}
-              getScrollParent={() => scrollParentRef}
-              loader={
-                <div className="loader" key={0}>
-                  Loading ...
-                </div>
-              }
-            >
-              <table>
-                <thead>
-                  <Header></Header>
-                </thead>
-                <tbody>
-                  {addNewRecord && (
-                    <InlineEditRow
-                      key={1}
-                      record={defaultRecord}
-                      removeInlineEditFn={setAddNewRecord}
-                      recordsLoaderFn={getIdeas}
-                    ></InlineEditRow>
-                  )}
-                  {records.map((record, index) => (
-                    <InlineEditRow
-                      key={record.id}
-                      record={record}
-                      recordsLoaderFn={getIdeas}
-                    ></InlineEditRow>
-                  ))}
-                </tbody>
-              </table>
-            </InfiniteScroll>
-          )}
-        </StyledIdeasContainer>
-      </StyledContainer>
-    );
-}
+  let scrollParentRef: any = null;
+
+  return (
+    <StyledContainer>
+      <StyledHeader>
+        <StyledTitle>My Ideas</StyledTitle>
+        <AddButtonImg src={AddIcon} onClick={onAdd}></AddButtonImg>
+      </StyledHeader>
+      <StyledIdeasContainer ref={(ref) => (scrollParentRef = ref)}>
+        {records.length === 0 && !addNewRecord && !loading ? (
+          <StyledNoRecordsView>
+            <BulbImg src={BulbIcon}></BulbImg>
+            Got Ideas?
+          </StyledNoRecordsView>
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={loadFunc}
+            hasMore={false}
+            useWindow={false}
+            getScrollParent={() => scrollParentRef}
+            loader={
+              <div className="loader" key={0}>
+                Loading ...
+              </div>
+            }
+          >
+            <table>
+              <thead>
+                <Header></Header>
+              </thead>
+              <tbody>
+                {addNewRecord && (
+                  <InlineEditRow
+                    key={1}
+                    record={defaultRecord}
+                    removeInlineEditFn={setAddNewRecord}
+                    recordsLoaderFn={getIdeas}
+                  ></InlineEditRow>
+                )}
+                {records.map((record, index) => (
+                  <InlineEditRow
+                    key={record.id}
+                    record={record}
+                    recordsLoaderFn={getIdeas}
+                  ></InlineEditRow>
+                ))}
+              </tbody>
+            </table>
+          </InfiniteScroll>
+        )}
+      </StyledIdeasContainer>
+    </StyledContainer>
+  );
+};
 
 export default MyIdeas;

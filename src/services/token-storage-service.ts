@@ -7,12 +7,11 @@ export class TokenStorage {
   }
 
   public static getAuthentication() {
-    return { 
+    return {
       "X-Access-Token": this.getToken(),
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
   }
-
 
   public static storeToken(token: string): void {
     sessionStorage.setItem(TokenStorage.SESSION_STORAGE_TOKEN, token);

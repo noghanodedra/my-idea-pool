@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-
 const StyledContainer = styled.tr`
   display: flex;
   align-items: center;
@@ -32,15 +31,15 @@ const StyleHeaderTitleAvg = styled(StyleHeaderTitle)`
 `;
 
 const Header = () => {
-    return (
-      <StyledContainer>
-        <StyleHeaderTitleNone></StyleHeaderTitleNone>
-        <StyleHeaderTitle>Impact</StyleHeaderTitle>
-        <StyleHeaderTitle>Ease</StyleHeaderTitle>
-        <StyleHeaderTitle>Confidence</StyleHeaderTitle>
-        <StyleHeaderTitleAvg>Avg.</StyleHeaderTitleAvg>
-      </StyledContainer>
-    );
-}
+  return (
+    <StyledContainer>
+      <StyleHeaderTitleNone></StyleHeaderTitleNone>
+      <StyleHeaderTitle>Impact</StyleHeaderTitle>
+      <StyleHeaderTitle>Ease</StyleHeaderTitle>
+      <StyleHeaderTitle>Confidence</StyleHeaderTitle>
+      <StyleHeaderTitleAvg>Avg.</StyleHeaderTitleAvg>
+    </StyledContainer>
+  );
+};
 
 export default Header;
