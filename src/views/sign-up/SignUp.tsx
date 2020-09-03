@@ -1,3 +1,4 @@
+import { EmailValidation, PasswordValidation } from 'components/Common';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -46,7 +47,6 @@ const SignUp = () => {
     }
 
     const onSubmit = (data: any) => {
-      console.log("Data submitted: ", data);
       onSignUp(data.email, data.name, data.password);
     };
 
@@ -73,13 +73,7 @@ const SignUp = () => {
             placeholder="Email"
             aria-label="Email"
             aria-invalid={errors.email ? "true" : "false"}
-            ref={register({
-              required: true,
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Please enter a valid e-mail address",
-              },
-            })}
+            ref={register(EmailValidation())}
           />
           {errors.email && errors.email.type === "required" && (
             <p className="invalid">This is required</p>
@@ -91,14 +85,7 @@ const SignUp = () => {
             placeholder="Password"
             aria-label="Password"
             aria-invalid={errors.password ? "true" : "false"}
-            ref={register({
-              required: true,
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
-                message:
-                  "Please enter a valid password. It must contain minimum 8 characters, one uppercase letter, one lowercase, one number required.",
-              },
-            })}
+            ref={register(PasswordValidation())}
           />
           {errors.password && errors.password.type === "required" && (
             <p className="invalid">This is required</p>

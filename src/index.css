@@ -51,7 +51,6 @@ span > b:nth-of-type(2) > i {
   width: 400px;
   height: 250px;
   padding: 20px;
-  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
   background: #ffffff;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
   border-radius: 3px;

@@ -1,3 +1,5 @@
+import NotFound from 'components/NotFound';
+import Page from 'components/Page';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,12 +18,19 @@ export const Routes = () => {
     <StyledContainer>
       <SideBar />
       <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={SignUp} />
-        <Route exact path="/ideas" component={MyIdeas} />
+        <Page title="Login" exact path="/login" component={Login} />
+        <Page title="Sign Up" exact path="/signup" component={SignUp} />
+        <Page
+          title="Ideas"
+          privateRoute={true}
+          exact
+          path="/ideas"
+          component={MyIdeas}
+        />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
+        <Route component={NotFound} />
       </Switch>
     </StyledContainer>
   );

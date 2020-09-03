@@ -1,5 +1,6 @@
 import { UserContext } from 'contexts/UserContext';
 import React, { useContext, useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { ideaService } from 'services/idea-service';
 import { userService } from 'services/user-service';
 import styled from 'styled-components';
@@ -93,7 +94,7 @@ const MyIdeas = () => {
       try {
         const response = await ideaService.getIdeas(pageNumber);
         setRecords([]);
-        setRecords(response.data);
+        setRecords([...records, ...response.data]);
         return response.data;
       } catch (e) {
         console.log(e);
@@ -106,6 +107,11 @@ const MyIdeas = () => {
       setAddNewRecord(true);
     }
     
+    const loadFunc = () => {
+      pageNumber++;
+      getIdeas(pageNumber);
+    };
+
     useEffect(() => {
       getProfileDetails();
       getIdeas(pageNumber);
@@ -113,6 +119,8 @@ const MyIdeas = () => {
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    let scrollParentRef:any = null;
     
     return (
       <StyledContainer>
@@ -120,35 +128,48 @@ const MyIdeas = () => {
           <StyledTitle>My Ideas</StyledTitle>
           <AddButtonImg src={AddIcon} onClick={onAdd}></AddButtonImg>
         </StyledHeader>
-        <StyledIdeasContainer>
+        <StyledIdeasContainer ref={(ref) => (scrollParentRef = ref)}>
           {records.length === 0 ? (
             <StyledNoRecordsView>
               <BulbImg src={BulbIcon}></BulbImg>
               Got Ideas?
             </StyledNoRecordsView>
           ) : (
-            <table>
-              <thead>
-                <Header></Header>
-              </thead>
-              <tbody>
-                {addNewRecord && (
-                  <InlineEditRow
-                    key={1}
-                    record={defaultRecord}
-                    removeInlineEditFn={setAddNewRecord}
-                    recordsLoaderFn={getIdeas}
-                  ></InlineEditRow>
-                )}
-                {records.map((record, index) => (
-                  <InlineEditRow
-                    key={record.id}
-                    record={record}
-                    recordsLoaderFn={getIdeas}
-                  ></InlineEditRow>
-                ))}
-              </tbody>
-            </table>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadFunc}
+              hasMore={false}
+              useWindow={false}
+              getScrollParent={() => scrollParentRef}
+              loader={
+                <div className="loader" key={0}>
+                  Loading ...
+                </div>
+              }
+            >
+              <table>
+                <thead>
+                  <Header></Header>
+                </thead>
+                <tbody>
+                  {addNewRecord && (
+                    <InlineEditRow
+                      key={1}
+                      record={defaultRecord}
+                      removeInlineEditFn={setAddNewRecord}
+                      recordsLoaderFn={getIdeas}
+                    ></InlineEditRow>
+                  )}
+                  {records.map((record, index) => (
+                    <InlineEditRow
+                      key={record.id}
+                      record={record}
+                      recordsLoaderFn={getIdeas}
+                    ></InlineEditRow>
+                  ))}
+                </tbody>
+              </table>
+            </InfiniteScroll>
           )}
         </StyledIdeasContainer>
       </StyledContainer>

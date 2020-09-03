@@ -1,3 +1,4 @@
+import { EmailValidation } from 'components/Common';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -59,13 +60,7 @@ const Login = () => {
             aria-label="Email"
             defaultValue={"email-1@test.com"}
             aria-invalid={errors.email ? "true" : "false"}
-            ref={register({
-              required: true,
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Please enter a valid e-mail address",
-              },
-            })}
+            ref={register(EmailValidation())}
           />
           {errors.email && errors.email.type === "required" && (
             <p className="invalid">This is required</p>
@@ -84,9 +79,6 @@ const Login = () => {
           />
           {errors.password && errors.password.type === "required" && (
             <p className="invalid">This is required</p>
-          )}
-          {errors.password && (
-            <p className="invalid">{errors.password.message}</p>
           )}
           <StyledButtonContainer>
             <DefaultStyledPrimaryButton type="submit">

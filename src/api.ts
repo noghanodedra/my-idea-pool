@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { InfoDialog } from 'components/InfoDialog';
 import { AUTHORIZATION_HEADER_NAME } from 'constants/common.constants';
 import { authService } from 'services/auth-service';
 import { TokenStorage } from 'services/token-storage-service';
@@ -15,6 +16,16 @@ client.interceptors.response.use((response) => {
    return response
 },  async (error) => {
    const originalRequest = error.config;
+   
+   if (error.response && error.response.status !== 401) {
+     console.log(error.response.data);
+     InfoDialog(error.response.data.reason);
+   } else if (error.request) {
+     console.log(error.request);
+   } else {
+     console.log("Error", error.message);
+   }
+
 
    if (
      error.response.status === 401 &&

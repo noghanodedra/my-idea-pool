@@ -74,8 +74,15 @@ const StyledNumericValue = styled(StyledText)`
   color: #4a4a4a;
   padding-left: 65px;
 `;
+
 const StyledTextValue = styled(StyledText)`
   padding-left: 73px;
+`;
+
+const StyledValidationMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin: auto;
 `;
 
 interface IProps {
@@ -88,6 +95,7 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
 
   const [mode, setMode] = useState(record.id.length === 0 ? true: false);
   const [currentRecord, setCurrentRecord] = useState(record);
+  const [contentError, setContentError] = useState({ message:""});
 
   console.log("editMode", mode);
 
@@ -104,28 +112,44 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
     confirmDialog(() => _deleteRecord(id), "This idea will be permanently deleted.");
   };
 
+  const validateContent = () => {
+      const val = currentRecord.content;
+      if(!val || !val.length) {
+        setContentError({ message: "This is required." });
+        return false;
+      }
+      if (val && val.length > 255) {
+        setContentError({ message: "Maximum allowed characters is 255." });
+        return false;
+      }
+      return true;
+  }
+
   const onAddEdit = async () => {
     try {
-       if(currentRecord.id.length > 0) {
-          await ideaService.updateIdea(
-            currentRecord.id,
-            currentRecord.content,
-            currentRecord.impact,
-            currentRecord.ease,
-            currentRecord.confidence
-          );
-          setMode(false);
-       } else {
-          await ideaService.createIdea(
-            currentRecord.content,
-            currentRecord.impact,
-            currentRecord.ease,
-            currentRecord.confidence
-          );
-          if(removeInlineEditFn) {
-            removeInlineEditFn(false);
-          }
-       }
+         if (!validateContent()) {
+           return;
+         }
+         if (currentRecord.id.length > 0) {
+           await ideaService.updateIdea(
+             currentRecord.id,
+             currentRecord.content,
+             currentRecord.impact,
+             currentRecord.ease,
+             currentRecord.confidence
+           );
+           setMode(false);
+         } else {
+           await ideaService.createIdea(
+             currentRecord.content,
+             currentRecord.impact,
+             currentRecord.ease,
+             currentRecord.confidence
+           );
+           if (removeInlineEditFn) {
+             removeInlineEditFn(false);
+           }
+         }
       await recordsLoaderFn();
     } catch (error) {
       console.log(error);
@@ -149,14 +173,17 @@ const InlineEditRow = ({ record, removeInlineEditFn, recordsLoaderFn }: IProps) 
             <StyledInput
               name="content"
               type="text"
-              min={3}
+              min={1}
               max={255}
-              required
               value={currentRecord.content}
-              onChange={(e) =>
-                setCurrentRecord({ ...currentRecord, content: e.target.value })
-              }
+              onChange={(e) =>{
+                setCurrentRecord({ ...currentRecord, content: e.target.value });
+                setContentError({message: ""});
+              }}
             ></StyledInput>
+            {contentError && contentError.message.length > 0 && (
+              <StyledValidationMessage>{contentError.message}</StyledValidationMessage>
+            )}
           </td>
           <td>
             <NumericStepper
