@@ -196,4 +196,9 @@ describe("Sign Up Component", () => {
     expect(TokenStorage.storeToken).toHaveBeenCalled();
     expect(userService.signUp).toHaveBeenCalled();
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  
 });

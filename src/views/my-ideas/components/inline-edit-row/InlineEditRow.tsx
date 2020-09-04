@@ -155,7 +155,6 @@ const InlineEditRow = ({
       }
       await recordsLoaderFn();
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -176,9 +175,10 @@ const InlineEditRow = ({
             <StyledInput
               name="content"
               type="text"
+              placeholder="Content"
               min={1}
               max={255}
-              value={currentRecord.content}
+              defaultValue={currentRecord.content}
               onChange={(e) => {
                 setCurrentRecord({ ...currentRecord, content: e.target.value });
                 setContentError({ message: "" });
@@ -224,10 +224,12 @@ const InlineEditRow = ({
           <td width={85}>
             <StyledButtonImg
               src={ConfirmIcon}
+              alt="Save Record"
               onClick={onAddEdit}
             ></StyledButtonImg>
             <StyledButtonImg
               src={CancelIcon}
+              alt="Cancel Update"
               onClick={() => {
                 record.id.length > 0
                   ? setMode(false)
@@ -246,10 +248,12 @@ const InlineEditRow = ({
           <td className="hidden">
             <StyledButtonImg
               src={PenIcon}
+              alt="Edit Record"
               onClick={() => setMode(true)}
             ></StyledButtonImg>
             <StyledButtonImg
               src={BinIcon}
+              alt="Remove Record"
               onClick={() => {
                 onDelete(record.id);
               }}

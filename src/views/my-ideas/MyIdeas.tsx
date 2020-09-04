@@ -74,9 +74,9 @@ const MyIdeas = () => {
   const initialRecords: Idea[] = [];
   const [records, setRecords] = useState(initialRecords);
   const [addNewRecord, setAddNewRecord] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   let pageNumber = 1;
+  let scrollParentRef: any = null;
 
   const { setDetails } = useContext(UserContext);
 
@@ -87,20 +87,16 @@ const MyIdeas = () => {
       return response.data;
     } catch (e) {
     }
-    return null;
   };
 
   const getIdeas = async (pageNumber: number = 1) => {
     try {
-      setLoading(true);
       const response = await ideaService.getIdeas(pageNumber);
       setRecords([]);
       setRecords(response.data);
-      setLoading(false);
       return response.data;
     } catch (e) {
     }
-    return null;
   };
 
   const onAdd = () => {
@@ -119,7 +115,6 @@ const MyIdeas = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  let scrollParentRef: any = null;
 
   return (
     <StyledContainer>
@@ -128,7 +123,7 @@ const MyIdeas = () => {
         <AddButtonImg src={AddIcon} onClick={onAdd} alt="addRecord"></AddButtonImg>
       </StyledHeader>
       <StyledIdeasContainer ref={(ref) => (scrollParentRef = ref)}>
-        {records.length === 0 && !addNewRecord && !loading ? (
+        {records.length === 0 && !addNewRecord ? (
           <StyledNoRecordsView>
             <BulbImg src={BulbIcon}></BulbImg>
             Got Ideas?

@@ -134,4 +134,9 @@ describe("Login Component", () => {
     expect(screen.getByPlaceholderText("Email")).toHaveValue(emailValue);
     expect(screen.getByPlaceholderText("Password")).toHaveValue(passwordValue);
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  
 });
