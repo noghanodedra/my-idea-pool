@@ -98,8 +98,6 @@ const InlineEditRow = ({
   const [currentRecord, setCurrentRecord] = useState(record);
   const [contentError, setContentError] = useState({ message: "" });
 
-  console.log("editMode", mode);
-
   const _deleteRecord = async (id: string) => {
     try {
       await ideaService.deleteIdea(id);

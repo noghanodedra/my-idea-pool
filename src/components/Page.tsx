@@ -11,7 +11,7 @@ const Page: React.FC<{
 }> = ({ component: Component, ...rest }) => {
   const { title, privateRoute } = rest;
   useEffect(() => {
-    document.title = `My Idea Tool | ${title}`;
+    document.title = `My Idea Pool | ${title}`;
   });
 
   const condition = TokenStorage.isAuthenticated();
