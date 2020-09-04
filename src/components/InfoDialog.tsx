@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const StyledInfoContainer = styled.div`
   width: 450px;
-  height: 100px;
+  height: 200px;
   padding: 10px;
   box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
   background: #ffffff;
@@ -14,7 +14,7 @@ const StyledInfoContainer = styled.div`
   border-radius: 3px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 
@@ -29,9 +29,10 @@ const StyledMessage = styled.span`
 const StyledOkButton = styled.button`
   color: #00a843 !important;
   font-size: 20px;
-  border: none;
+  border: 1px solid;
   background: none;
-  width: 50px;
+  width: 100px;
+  padding: 4px;
   margin: 10px;
   cursor: pointer;
 `;

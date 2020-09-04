@@ -46,43 +46,6 @@ span > b:nth-of-type(2) > i {
   border-width: 0.8ex 0.8ex 0px !important;
 }
 
-.custom-ui {
-  text-align: center;
-  width: 400px;
-  height: 250px;
-  padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-}
-
-.custom-ui > div {
-  margin-top: 10px;
-  margin-bottom: 36px;
-  font-size: 24px;
-  color: #2a3842;
-}
-.custom-ui > p {
-  font-size: 16px;
-  color: #2a3842;
-  letter-spacing: -0.1px;
-  line-height: 16px;
-}
-.custom-ui > button {
-  width: 120px;
-  padding: 10px;
-  margin: 10px;
-  border: none;
-  margin-bottom: 1px;
-  margin-top: 86px;
-  cursor: pointer;
-  background: none;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 18px;
-  color: #2a3842;
-  letter-spacing: -0.11px;
-}
 .react-confirm-alert-overlay {
   background: none !important;
 }

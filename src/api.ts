@@ -42,7 +42,7 @@ client.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = TokenStorage.getRefreshToken() || "";
       const res = await authService.refreshToken(refreshToken);
-      if (res.status === 200) {
+      if (res.status === 201) {
         TokenStorage.storeToken(res.data.jwt);
         axios.defaults.headers.common[AUTHORIZATION_HEADER_NAME] = +res.data
           .jwt;
