@@ -4,11 +4,11 @@ const DefaultStyledInput = styled.input`
   width: 100%;
   border: 0;
   outline: 0;
-  font-size: 16px;
   background: transparent;
   border-bottom: 1px solid ${(props) => props.theme.main.color.inputBorder};
   padding: 5px 5px 10px 0px;
   margin-bottom: 40px;
+  font-size: 20px;
 
   ::placeholder {
     color: ${(props) => props.theme.main.color.placeholder};
