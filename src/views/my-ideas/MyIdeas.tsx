@@ -15,7 +15,7 @@ const StyledContainer = styled.div`
   margin-left: 79px;
   margin-right: 87px;
   height: 100%;
-  width: 100%;
+  width: 77%;
 `;
 
 const StyledHeader = styled.div`
