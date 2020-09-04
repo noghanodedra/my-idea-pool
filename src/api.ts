@@ -4,14 +4,17 @@ import { AUTHORIZATION_HEADER_NAME } from 'constants/common.constants';
 import { authService } from 'services/auth-service';
 import { TokenStorage } from 'services/token-storage-service';
 
+const DEFAULT_TIMEOUT_MS = 600000;
+
 const client = axios.create({
   baseURL: `${process.env.REACT_APP_API_ENDPOINT}`,
-  timeout: parseInt(`${process.env.REACT_APP_TIMEOUT_MS}`) || 600000,
+  timeout:
+    parseInt(`${process.env.REACT_APP_TIMEOUT_MS}`) || DEFAULT_TIMEOUT_MS,
   headers: TokenStorage.getAuthentication(),
 });
 
 const refreshTokenEndPoint = `${process.env.REACT_APP_API_ENDPOINT}/refresh`;
-//Add a response interceptor
+
 client.interceptors.response.use(
   (response) => {
     return response;

@@ -102,11 +102,9 @@ describe("Login Component", () => {
     TokenStorage.storeRefreshToken = jest.fn().mockImplementation((a) => a);
     TokenStorage.storeToken = jest.fn().mockImplementation((a) => a);
 
-    authService.login = jest
-      .fn()
-      .mockImplementation((a) => ({
-        data: { refresh_token: "test", jwt: "test" },
-      }));
+    authService.login = jest.fn().mockImplementation((a) => ({
+      data: { refresh_token: "test", jwt: "test" },
+    }));
     fireEvent.input(screen.getByPlaceholderText("Email"), {
       target: {
         value: emailValue,
@@ -138,5 +136,4 @@ describe("Login Component", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  
 });

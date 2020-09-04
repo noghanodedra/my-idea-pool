@@ -7,11 +7,8 @@ import React from 'react';
 
 import NumericStepper from '../NumericStepper';
 
-
 const renderComponent = () =>
-  render(
-    <NumericStepper min={1} max={10} defaultValue={8}/>
-  );
+  render(<NumericStepper min={1} max={10} defaultValue={8} />);
 
 describe("Numeric Stepper Component", () => {
   beforeEach(() => {
@@ -45,5 +42,4 @@ describe("Numeric Stepper Component", () => {
       )
     ).toHaveValue("8");
   });
-  
 });

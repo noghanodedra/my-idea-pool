@@ -30,5 +30,4 @@ describe("Header Component", () => {
     const wrapper = shallow(<Header />);
     expect(wrapper).toMatchSnapshot();
   });
-  
 });

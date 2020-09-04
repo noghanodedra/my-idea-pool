@@ -11,11 +11,11 @@ import Theme from 'Theme';
 import InlineEditRow from '../InlineEditRow';
 
 const newRecord: Idea = {
- id: "",
- impact: 8,
- ease:8,
- confidence: 9,
- content: "test"
+  id: "",
+  impact: 8,
+  ease: 8,
+  confidence: 9,
+  content: "test",
 };
 
 const persistentRecord: Idea = {
@@ -45,7 +45,7 @@ const renderComponent = async (record: Idea) =>
   });
 
 describe("InlineEditRow Component", () => {
-  beforeEach( async() => {
+  beforeEach(async () => {
     ideaService.deleteIdea = jest.fn().mockImplementation((a) => a);
     ideaService.updateIdea = jest.fn().mockImplementation((a, b, c, d, e) => a);
     ideaService.createIdea = jest.fn().mockImplementation((a, b, c, d) => a);
@@ -77,9 +77,8 @@ describe("InlineEditRow Component", () => {
         (content, element) => element.tagName.toLowerCase() === "img"
       )
     ).toHaveLength(2);
-        expect(await screen.findAllByText(/test/i)).toHaveLength(1);
-        expect(await screen.findAllByText(/8/i)).toHaveLength(4);
-
+    expect(await screen.findAllByText(/test/i)).toHaveLength(1);
+    expect(await screen.findAllByText(/8/i)).toHaveLength(4);
   });
 
   it("is styled correctly - edit mode", () => {
@@ -102,7 +101,7 @@ describe("InlineEditRow Component", () => {
 
   it("shows confirm dialog on 'delete' button click", async () => {
     await renderComponent(persistentRecord);
-    
+
     fireEvent.click(screen.getByAltText("Remove Record"));
 
     expect(await screen.findAllByText(/are you/i)).toHaveLength(1);
@@ -121,134 +120,127 @@ describe("InlineEditRow Component", () => {
     fireEvent.click(screen.getByText(/ok/i));
 
     expect(ideaService.deleteIdea).toHaveBeenCalled();
-
   });
 
-   it("should show row in 'edit' mode on 'edit' button click", async () => {
-     await renderComponent(persistentRecord);
+  it("should show row in 'edit' mode on 'edit' button click", async () => {
+    await renderComponent(persistentRecord);
 
-     fireEvent.click(screen.getByAltText("Edit Record"));
+    fireEvent.click(screen.getByAltText("Edit Record"));
 
-      expect(
-        await screen.getAllByText(
-          (content, element) => element.tagName.toLowerCase() === "input"
-        )
-      ).toHaveLength(4);
-   });
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
+  });
 
-   it("should move to row mode from 'edit' mode on 'cancel' button click", async () => {
-     await renderComponent(persistentRecord);
+  it("should move to row mode from 'edit' mode on 'cancel' button click", async () => {
+    await renderComponent(persistentRecord);
 
-     fireEvent.click(screen.getByAltText("Edit Record"));
+    fireEvent.click(screen.getByAltText("Edit Record"));
 
-     expect(
-       await screen.getAllByText(
-         (content, element) => element.tagName.toLowerCase() === "input"
-       )
-     ).toHaveLength(4);
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
 
-     fireEvent.click(screen.getByAltText("Cancel Update"));
+    fireEvent.click(screen.getByAltText("Cancel Update"));
 
-     expect(
-       await screen.getAllByText(
-         (content, element) => element.tagName.toLowerCase() === "td"
-       )
-     ).toHaveLength(7);
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "td"
+      )
+    ).toHaveLength(7);
+  });
 
-   });
+  it("should show required validation message for empty 'content' input on 'confirm' button click", async () => {
+    await renderComponent(newRecord);
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
 
-   it("should show required validation message for empty 'content' input on 'confirm' button click", async () => {
-     await renderComponent(newRecord);
-     expect(
-       await screen.getAllByText(
-         (content, element) => element.tagName.toLowerCase() === "input"
-       )
-     ).toHaveLength(4);
-
-     fireEvent.input(
-       screen.getByPlaceholderText("Content"),
-       {
-         target: {
-           value: "",
-         },
-       }
-     );
-
-     fireEvent.click(screen.getByAltText("Save Record"));
-
-     expect(await screen.findAllByText(/required/i)).toHaveLength(1);
-   });
-
-   it("should show max length validation message for more than 255 chars in 'content' input on 'confirm' button click", async () => {
-     await renderComponent(newRecord);
-     expect(
-       await screen.getAllByText(
-         (content, element) => element.tagName.toLowerCase() === "input"
-       )
-     ).toHaveLength(4);
-
-     fireEvent.input(screen.getByPlaceholderText("Content"), {
-       target: {
-         value: "123445545353535353dgdghgfsdfggsfgsfgfgdfgdgsdgdsfgdfgdsgfdgdgdgdfgdgdsgfgsdgdgdgdfgdgfgdfggfksndfsfksndfksflsndfsklnfklsndlkfnslknfwerjwerjsknfsknfnsnfsnfdfsfsfsdfsdfsfwerwerwrwrwrwrwrwrwrwrwrwrwrwrwrwterdfsfsfsfwersfsdtafhsfhgdhnsfsfnsfnsnfsknfsdfksnfnkslndflsndflsnflsnflsnflsndflsknflerhehknskfkasnfsnlfnldflsnflanflsnldfnlnfslnfldsnflsdnff",
-       },
-     });
-
-     fireEvent.click(screen.getByAltText("Save Record"));
-
-     expect(
-       await screen.findAllByText(/Maximum allowed characters is 255/i)
-     ).toHaveLength(1);
-   });
-
-    it("should save new record on 'confirm' button click", async () => {
-      await renderComponent(newRecord);
-      expect(
-        await screen.getAllByText(
-          (content, element) => element.tagName.toLowerCase() === "input"
-        )
-      ).toHaveLength(4);
-
-      fireEvent.input(screen.getByPlaceholderText("Content"), {
-        target: {
-          value: "hello",
-        },
-      });
-
-       await act(async () => {
-         fireEvent.click(screen.getByAltText("Save Record"));
-       });
-
-      expect(ideaService.createIdea).toHaveBeenCalled();
-
+    fireEvent.input(screen.getByPlaceholderText("Content"), {
+      target: {
+        value: "",
+      },
     });
 
-    it("should update persistent record on 'confirm' button click", async () => {
-      await renderComponent(persistentRecord);
-           
-      fireEvent.click(screen.getByAltText("Edit Record"));
+    fireEvent.click(screen.getByAltText("Save Record"));
 
-      expect(
-        await screen.getAllByText(
-          (content, element) => element.tagName.toLowerCase() === "input"
-        )
-      ).toHaveLength(4);
+    expect(await screen.findAllByText(/required/i)).toHaveLength(1);
+  });
 
-      fireEvent.input(screen.getByPlaceholderText("Content"), {
-        target: {
-          value: "hello",
-        },
-      });
+  it("should show max length validation message for more than 255 chars in 'content' input on 'confirm' button click", async () => {
+    await renderComponent(newRecord);
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
 
-      await act(async () => {
-       fireEvent.click(screen.getByAltText("Save Record"));
-      });
-
-      expect(ideaService.updateIdea).toHaveBeenCalled();
+    fireEvent.input(screen.getByPlaceholderText("Content"), {
+      target: {
+        value:
+          "123445545353535353dgdghgfsdfggsfgsfgfgdfgdgsdgdsfgdfgdsgfdgdgdgdfgdgdsgfgsdgdgdgdfgdgfgdfggfksndfsfksndfksflsndfsklnfklsndlkfnslknfwerjwerjsknfsknfnsnfsnfdfsfsfsdfsdfsfwerwerwrwrwrwrwrwrwrwrwrwrwrwrwrwterdfsfsfsfwersfsdtafhsfhgdhnsfsfnsfnsnfsknfsdfksnfnkslndflsndflsnflsnflsnflsndflsknflerhehknskfkasnfsnlfnldflsnflanflsnldfnlnfslnfldsnflsdnff",
+      },
     });
 
+    fireEvent.click(screen.getByAltText("Save Record"));
+
+    expect(
+      await screen.findAllByText(/Maximum allowed characters is 255/i)
+    ).toHaveLength(1);
+  });
+
+  it("should save new record on 'confirm' button click", async () => {
+    await renderComponent(newRecord);
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
+
+    fireEvent.input(screen.getByPlaceholderText("Content"), {
+      target: {
+        value: "hello",
+      },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByAltText("Save Record"));
+    });
+
+    expect(ideaService.createIdea).toHaveBeenCalled();
+  });
+
+  it("should update persistent record on 'confirm' button click", async () => {
+    await renderComponent(persistentRecord);
+
+    fireEvent.click(screen.getByAltText("Edit Record"));
+
+    expect(
+      await screen.getAllByText(
+        (content, element) => element.tagName.toLowerCase() === "input"
+      )
+    ).toHaveLength(4);
+
+    fireEvent.input(screen.getByPlaceholderText("Content"), {
+      target: {
+        value: "hello",
+      },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByAltText("Save Record"));
+    });
+
+    expect(ideaService.updateIdea).toHaveBeenCalled();
+  });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  
 });

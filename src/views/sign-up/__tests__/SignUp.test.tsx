@@ -152,11 +152,9 @@ describe("Sign Up Component", () => {
     const passwordValue = "Test@124";
     const nameValue = "test";
 
-    userService.signUp = jest
-      .fn()
-      .mockImplementation((a) => ({
-        data: { refresh_token: "test", jwt: "test" },
-      }));
+    userService.signUp = jest.fn().mockImplementation((a) => ({
+      data: { refresh_token: "test", jwt: "test" },
+    }));
     TokenStorage.clear = jest.fn();
     TokenStorage.storeRefreshToken = jest.fn().mockImplementation((a) => a);
     TokenStorage.storeToken = jest.fn().mockImplementation((a) => a);
@@ -200,5 +198,4 @@ describe("Sign Up Component", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  
 });

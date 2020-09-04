@@ -18,7 +18,7 @@ const renderComponent = () =>
   );
 
 describe("SideBar Component", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     renderComponent();
   });
 
